@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import ItemList from './components/ItemList';
+
 import Login from './components/Login';
 import Signup from './components/Signup';
-import AddItem from './components/AddItem';
-import Welcome from "./components/Welcome";
 import DefaultPage from "./components/DefaultPage";
-import MyItems from "./components/MyItems";
+import PatientHome from "./components/patientHome";
+import DoctorHome from "./components/doctorHome";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -29,11 +28,8 @@ const App = () => {
           <Routes>
             <Route path="/login" element={<Login setUser={setUser} />} />
             <Route path="/signup" element={<Signup setUser={setUser} />} />
-            <Route path="/add-item" element={<AddItem /> } />
-            <Route path="/item" element={<ItemList user={user} />} />
-            <Route path="/welcome" element={<Welcome  />} />
-            <Route path="/my-items" element={<MyItems  />} />
-
+            <Route path="/phome" element={<PatientHome setUser={setUser} />} />
+              <Route path="/dhome" element={<DoctorHome setUser={setUser} />} />
             <Route path="/" element={<DefaultPage  />} />
 
 

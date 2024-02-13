@@ -1,64 +1,89 @@
-// Login.js
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Login.css';
 
 const Login = () => {
     const navigate = useNavigate();
 
-    const [credentials, setCredentials] = useState({
-        username: '',
+    const [loginData, setLoginData] = useState({
+        email: '',
         password: '',
+        userType: 'doctor',
     });
 
     const handleChange = (e) => {
-        setCredentials({
-            ...credentials,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        setLoginData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
-
         try {
-            console.log(credentials);
-            const response = await fetch('http://localhost:8080/api/users/login', {
+            const response = await fetch('http://localhost:8080/api/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(credentials),
+                body: JSON.stringify(loginData),
             });
 
             if (response.ok) {
-                console.log("got ok");
-                const responseData = await response.json();
-                const { token } = responseData;
-                sessionStorage.setItem('token', token);
-                const [username, expirationTimestamp] = token.split('|');
-
-                console.log('Username:', username);
-                navigate("/item");
+                console.log(`${loginData.userType} login successful!`);
+                // Redirect based on user type
+                if (loginData.userType === 'patient') {
+                    navigate('/patientHome');
+                } else if (loginData.userType === 'doctor') {
+                    navigate('/doctorHome');
+                }
+            } else {
+                console.error('Login failed.');
+                // Handle error, e.g., display error message
             }
         } catch (error) {
-            console.error('Error during login:', error.message);
+            console.error('Error during login:', error);
         }
     };
 
     return (
-        <div className="login-container">
-            <h2>Login</h2>
+        <div>
+            <h2>User Login</h2>
             <form onSubmit={handleLogin}>
                 <label>
-                    Username:
-                    <input type="text" name="username" value={credentials.username} onChange={handleChange} />
+                    Email:
+                    <input
+                        type="email"
+                        name="email"
+                        value={loginData.email}
+                        onChange={handleChange}
+                        required
+                    />
                 </label>
+                <br />
                 <label>
                     Password:
-                    <input type="password" name="password" value={credentials.password} onChange={handleChange} />
+                    <input
+                        type="password"
+                        name="password"
+                        value={loginData.password}
+                        onChange={handleChange}
+                        required
+                    />
                 </label>
+                <br />
+                <label>
+                    User Type:
+                    <select
+                        name="userType"
+                        value={loginData.userType}
+                        onChange={handleChange}
+                    >
+                        <option value="doctor">Doctor</option>
+                        <option value="patient">Patient</option>
+                    </select>
+                </label>
+                <br />
                 <button type="submit">Login</button>
             </form>
         </div>

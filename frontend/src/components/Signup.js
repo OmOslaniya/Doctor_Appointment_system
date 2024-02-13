@@ -1,78 +1,126 @@
-// Signup.js
-
 import React, { useState } from 'react';
 import '../styles/Signup.css';
 
-const Signup = () => {
-    const [user, setUser] = useState({
-        username: '',
+const SignupForm = () => {
+    const [userData, setUserData] = useState({
+        userType: 'doctor',
+        name: '',
+        specialization: '',
+        contactDetails: '',
         email: '',
-        password: ''
+        password: '',
     });
 
     const handleChange = (e) => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value
-        });
+        const { name, value } = e.target;
+        setUserData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
-    const handleSubmit = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
-
-        console.log("sending server with: ", user);
-
         try {
-            // Make a POST request to the signup endpoint
-            const response = await fetch('http://localhost:8080/api/users/signup', {
+            const response = await fetch('http://localhost:8080/api/' + userData.userType + 's', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // You can add other headers if needed
                 },
-                body: JSON.stringify(user), // Include the user data in the request body
-
+                body: JSON.stringify(userData),
             });
 
-            console.log(response.data);
-
             if (response.ok) {
-                // Handle success
-                const responseData = await response.json();
-                console.log(responseData.data);
+                console.log(userData.userType + ' registered successfully!');
+                // Handle success, e.g., redirect to login page
             } else {
-                // Handle error
-                const errorData = await response.json();
-                console.error('Error during signup:', errorData.error);
+                console.error('Registration failed.');
+                // Handle error, e.g., display error message
             }
-
         } catch (error) {
-            // Handle network errors or other exceptions
-            console.error('Error during signup:', error.message);
+            console.error('Error during registration:', error);
         }
     };
 
-
     return (
-        <div className="signup-container">
-            <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
+        <div>
+            <h2>User Signup</h2>
+            <form onSubmit={handleSignup}>
                 <label>
-                    Username:
-                    <input type="text" name="username" value={user.username} onChange={handleChange} />
+                    User Type:
+                    <select
+                        name="userType"
+                        value={userData.userType}
+                        onChange={handleChange}
+                    >
+                        <option value="doctor">Doctor</option>
+                        <option value="patient">Patient</option>
+                    </select>
                 </label>
+                <br />
+                <label>
+                    Name:
+                    <input
+                        type="text"
+                        name="name"
+                        value={userData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </label>
+                <br />
+                {userData.userType === 'doctor' && (
+                    <>
+                        <label>
+                            Specialization:
+                            <input
+                                type="text"
+                                name="specialization"
+                                value={userData.specialization}
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
+                        <br />
+                    </>
+                )}
+                <label>
+                    Contact Details:
+                    <input
+                        type="text"
+                        name="contactDetails"
+                        value={userData.contactDetails}
+                        onChange={handleChange}
+                        required
+                    />
+                </label>
+                <br />
                 <label>
                     Email:
-                    <input type="email" name="email" value={user.email} onChange={handleChange} />
+                    <input
+                        type="email"
+                        name="email"
+                        value={userData.email}
+                        onChange={handleChange}
+                        required
+                    />
                 </label>
+                <br />
                 <label>
                     Password:
-                    <input type="password" name="password" value={user.password} onChange={handleChange} />
+                    <input
+                        type="password"
+                        name="password"
+                        value={userData.password}
+                        onChange={handleChange}
+                        required
+                    />
                 </label>
-                <button type="submit">Sign Up</button>
+                <br />
+                <button type="submit">Signup</button>
             </form>
         </div>
     );
 };
 
-export default Signup;
+export default SignupForm;
