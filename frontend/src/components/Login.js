@@ -33,9 +33,9 @@ const Login = () => {
                 console.log(`${loginData.userType} login successful!`);
                 // Redirect based on user type
                 if (loginData.userType === 'patient') {
-                    navigate('/patientHome');
+                    navigate('/phome');
                 } else if (loginData.userType === 'doctor') {
-                    navigate('/doctorHome');
+                    navigate('/dhome');
                 }
             } else {
                 console.error('Login failed.');
