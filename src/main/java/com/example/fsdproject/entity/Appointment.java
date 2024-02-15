@@ -1,43 +1,33 @@
 package com.example.fsdproject.entity;
-import jakarta.persistence.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import jakarta.persistence.*;
 
 @Entity
 public class Appointment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointmentId;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
-    private Doctor doctor;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
-    private LocalDate date;
-    private LocalTime time;
-    private String status; // e.g., booked, canceled
+    @ManyToOne
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
-    // Constructors, getters, and setters
+    private String slot;
 
     public Appointment() {
         // Default constructor
     }
 
-    public Appointment(Doctor doctor, Patient patient, LocalDate date, LocalTime time, String status) {
-        this.doctor = doctor;
+    public Appointment(Long appointmentId, Patient patient, Schedule schedule, String slot) {
+        this.appointmentId = appointmentId;
         this.patient = patient;
-        this.date = date;
-        this.time = time;
-        this.status = status;
+        this.schedule = schedule;
+        this.slot = slot;
     }
-
-    // Getters and setters for all fields
 
     public Long getAppointmentId() {
         return appointmentId;
@@ -45,14 +35,6 @@ public class Appointment {
 
     public void setAppointmentId(Long appointmentId) {
         this.appointmentId = appointmentId;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
     }
 
     public Patient getPatient() {
@@ -63,41 +45,19 @@ public class Appointment {
         this.patient = patient;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public Schedule getSchedule() {
+        return schedule;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
-    public LocalTime getTime() {
-        return time;
+    public String getSlot() {
+        return slot;
     }
 
-    public void setTime(LocalTime time) {
-        this.time = time;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    // toString method for easy logging or debugging
-
-    @Override
-    public String toString() {
-        return "Appointment{" +
-                "appointmentId=" + appointmentId +
-                ", doctor=" + doctor +
-                ", patient=" + patient +
-                ", date=" + date +
-                ", time=" + time +
-                ", status='" + status + '\'' +
-                '}';
+    public void setSlot(String slot) {
+        this.slot = slot;
     }
 }

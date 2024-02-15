@@ -1,49 +1,157 @@
-// PatientHome.js
-
 import React, { useEffect, useState } from 'react';
-import '../styles/phome.css'; // Import the CSS file
-
-const AvailabilitySlot = ({ slot, onBookSlot }) => {
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import {pemail} from "./Login";
+const AppointmentSlot = ({ slot, onBookSlot }) => {
     return (
-        <div className="availability-slot">
+        <div>
             <p>{slot}</p>
-            <button className="book-btn" onClick={() => onBookSlot(slot)}>
-                Book
-            </button>
+            <button onClick={() => onBookSlot(slot)}>Book</button>
         </div>
     );
 };
-
 const DoctorCard = ({ doctor }) => {
-    const [showAvailability, setShowAvailability] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [showSlots, setShowSlots] = useState(false);
     const [selectedSlot, setSelectedSlot] = useState('');
+    const [appointments, setAppointments] = useState([]);
+    const [doctorobj, setdoctorobj] = useState(null);
+    const [patientobj, setpatientobj] = useState(null);
+    const [scheduleobj, setscheduleobj] = useState(null);
 
-    const handleCheckAvailability = () => {
-        setShowAvailability(true);
+    const handleCheckAvailability = async () => {
+        if (selectedDate && doctor) {
+            try {
+                const doctorId = doctor.doctorId;
+                const response = await fetch(`http://localhost:8080/api/doctors/${doctorId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const doctorData = await response.json();
+                    setdoctorobj(doctorData);
+                    console.log("Doctor set:", doctorData);
+
+                    const response2 = await fetch(`http://localhost:8080/api/patients/${pemail}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    if (response2.ok) {
+                        const patientData = await response2.json();
+                        setpatientobj(patientData);
+                        console.log("Patient set:", patientData);
+
+                        // Set showSlots to true here
+                        setShowSlots(true);
+                    } else {
+                        const errorData = await response2.json();
+                        console.error('Error:', errorData.error);
+                    }
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData.error);
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        } else {
+            alert('Please select a date and doctor.');
+        }
     };
 
-    const handleBookSlot = (slot) => {
-        // Add logic for booking the slot
-        console.log(`Booking slot ${slot} for ${doctor.name}`);
-        setSelectedSlot(slot);
-        // You can add further logic for the booking process
+    const convertSlotToNumber = (slot) => {
+        switch (slot) {
+            case '9:00 AM - 10:00 AM':
+                return'1';
+            case '10:00 AM - 11:00 AM':
+                return'2';
+            case '11:00 AM - 12:00 PM':
+                return '3';
+            default:
+                return '0';
+        }
+    };
+    const handleBookSlot = async (slot) => {
+        try {
+            console.log("hello");
+
+            const numericSlot = convertSlotToNumber(slot);
+            console.log("slot " + numericSlot);
+            const response3 = await fetch('http://localhost:8080/api/schedules/book', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    doctor: doctorobj,
+                    date: selectedDate,
+                    slot: numericSlot,
+
+                }),
+            });
+            console.log("just before");
+            if (response3.ok) {
+                const scheduledata = await response3.json();
+                console.log(scheduledata);
+                setSelectedSlot(slot);
+                setpatientobj(scheduledata);
+
+            } else {
+                console.error('Failed to book appointment.');
+            }
+
+
+            const response2 = await fetch('http://localhost:8080/api/appointments/book', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    patient: patientobj,
+                    schedule:  scheduleobj,
+                    slot: numericSlot,
+
+                }),
+            });
+
+            if (response2.ok) {
+                console.log('Appointment booked successfully!');
+                setSelectedSlot(slot);
+
+            } else {
+                console.error('Failed to book appointment.');
+            }
+
+        } catch (error) {
+            console.error('Error during appointment booking:', error);
+        }
     };
 
     const availabilitySlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM'];
 
     return (
-        <div className="doctor-card">
+        <div>
             <h3>{doctor.name}</h3>
-            <p className="specialization">{doctor.specialization}</p>
-            <button className="availability-btn" onClick={handleCheckAvailability}>
-                Check Availability
-            </button>
-            {showAvailability && (
-                <div className="availability-container">
+            <p>{doctor.specialization}</p>
+            <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="MMMM d, yyyy"
+                placeholderText="Select a date"
+            />
+            <button onClick={handleCheckAvailability}>Check Availability</button>
+            {showSlots && (
+                <div>
                     <h4>Select Availability</h4>
-                    <div className="availability-slots">
+                    <div>
                         {availabilitySlots.map((slot) => (
-                            <AvailabilitySlot key={slot} slot={slot} onBookSlot={handleBookSlot} />
+                            <AppointmentSlot key={slot} slot={slot} onBookSlot={handleBookSlot} />
                         ))}
                     </div>
                     {selectedSlot && <p>Selected Slot: {selectedSlot}</p>}
@@ -57,7 +165,6 @@ const PatientHome = () => {
     const [doctors, setDoctors] = useState([]);
 
     useEffect(() => {
-        // Fetch the list of doctors from the backend API
         const fetchDoctors = async () => {
             try {
                 const response = await fetch('http://localhost:8080/api/doctors');
@@ -78,8 +185,8 @@ const PatientHome = () => {
 
     return (
         <div>
-            <h2 className="page-title">List of Registered Doctors</h2>
-            <div className="doctor-card-container">
+            <h2>List of Registered Doctors</h2>
+            <div>
                 {doctors.map((doctor) => (
                     <DoctorCard key={doctor.id} doctor={doctor} />
                 ))}

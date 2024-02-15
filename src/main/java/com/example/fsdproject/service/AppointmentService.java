@@ -1,9 +1,9 @@
 package com.example.fsdproject.service;
 
 import com.example.fsdproject.entity.Appointment;
-import com.example.fsdproject.entity.Doctor;
 import com.example.fsdproject.entity.Patient;
 import com.example.fsdproject.repository.AppointmentRepository;
+import com.example.fsdproject.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,9 @@ public class AppointmentService {
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private PatientRepository patientRepository;
 
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.findAll();
@@ -29,16 +32,33 @@ public class AppointmentService {
         return appointmentRepository.findByPatient(patient);
     }
 
-    public List<Appointment> getAppointmentsByDoctorAndStatus(Doctor doctor, String status) {
-        return appointmentRepository.findByDoctorAndStatus(doctor, status);
-    }
+    public void bookAppointment(Appointment appointment) {
+        try {
+            // Get the patient associated with the appointment
+            Patient patient = appointment.getPatient();
 
-    public Appointment saveAppointment(Appointment appointment) {
-        return appointmentRepository.save(appointment);
+            // Make sure the patient is saved or retrieved from the database
+            if (patient.getPatientId() == null) {
+                // If patient is not saved, save it
+                patient = patientRepository.save(patient);
+            } else {
+                // If patient is already saved, retrieve it from the database
+                patient = patientRepository.findById(patient.getPatientId()).orElse(null);
+            }
+
+            // Set the saved/retrieved patient back to the appointment
+            appointment.setPatient(patient);
+
+            // Perform additional validation if needed
+
+            // Save the appointment after ensuring patient is saved
+            appointmentRepository.save(appointment);
+        } catch (Exception e) {
+            // Handle exceptions as needed
+        }
     }
 
     public void deleteAppointment(Long appointmentId) {
         appointmentRepository.deleteById(appointmentId);
     }
 }
-
