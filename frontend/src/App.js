@@ -8,6 +8,8 @@ import Signup from './components/Signup';
 import DefaultPage from "./components/DefaultPage";
 import PatientHome from "./components/patientHome";
 import DoctorHome from "./components/doctorHome";
+import MyAppointments from "./components/myAppointments";
+import Myschedules from "./components/myschedules";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -26,11 +28,14 @@ const App = () => {
 
 
           <Routes>
-            <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/signup" element={<Signup setUser={setUser} />} />
-            <Route path="/phome" element={<PatientHome setUser={setUser} />} />
+              <Route path="/login" element={<Login setUser={setUser} />} />
+              <Route path="/signup" element={<Signup setUser={setUser} />} />
+              <Route path="/phome" element={<PatientHome setUser={setUser} />} />
               <Route path="/dhome" element={<DoctorHome setUser={setUser} />} />
-            <Route path="/" element={<DefaultPage  />} />
+              <Route path="/" element={<DefaultPage  />} />
+              <Route path="/myappointments" element={<MyAppointments setUser={setUser} />} />
+              <Route path="/myschedules" element={<Myschedules setUser={setUser} />} />
+
 
 
 

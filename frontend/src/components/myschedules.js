@@ -3,28 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { pemail } from "./Login";
 import '../styles/myappointments.css';
 
-const AppointmentItem = ({ appointment }) => {
-    const { slot, schedule } = appointment;
-
-    return (
-        <div className="appointment-item">
-            <div>
-                <strong>Slot:</strong> {slot}
-            </div>
-            <div>
-                <strong>Doctor:</strong> {schedule.doctor.name}
-            </div>
-            <div>
-                <strong>Specialization:</strong> {schedule.doctor.specialization}
-            </div>
-            <div>
-                <strong>Date:</strong> {new Date(schedule.date).toLocaleDateString()}
-            </div>
-        </div>
-    );
-};
-
-const MyAppointments = () => {
+const MySchedules = () => {
     const [appointments, setAppointments] = useState([]);
 
     useEffect(() => {
@@ -62,4 +41,4 @@ const MyAppointments = () => {
     );
 };
 
-export default MyAppointments;
+export default MySchedules;
