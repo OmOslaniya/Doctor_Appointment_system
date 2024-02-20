@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {pemail} from "./Login";
+import '../styles/patienthome.css'
+import '../styles/navbar.css';
+import Navbar from "./NavBar";
+// import { BrowserRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
+
+let s;
 const AppointmentSlot = ({ slot, onBookSlot }) => {
     return (
         <div>
@@ -143,14 +149,19 @@ const DoctorCard = ({ doctor }) => {
             if (response3.ok) {
                 const scheduledata = await response3.json();
                 console.log("schedule obj");
-                console.log(scheduledata);
-                setSelectedSlot(slot);
+                // console.log(scheduledata);
+                s=scheduledata;
+                console.log("s is");
+                console.log(s);
                 setscheduleobj(scheduledata);
+                setSelectedSlot(slot);
+
 
             } else {
                 console.error('Failed to book appointment.');
             }
-
+            // console.log("SSSSSSSSSSSSSS");
+            // console.log(scheduleobj);
             console.log("before appointment booked");
             const response2 = await fetch('http://localhost:8080/api/appointments/book', {
                 method: 'POST',
@@ -159,7 +170,7 @@ const DoctorCard = ({ doctor }) => {
                 },
                 body: JSON.stringify({
                     patient: patientobj,
-                    schedule:  scheduleobj,
+                    schedule:  s,
                     slot: numericSlot,
 
                 }),
@@ -181,7 +192,7 @@ const DoctorCard = ({ doctor }) => {
     // const availabilitySlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM'];
 
     return (
-        <div>
+        <div className="doctor-card">
             <h3>{doctor.name}</h3>
             <p>{doctor.specialization}</p>
             <DatePicker
@@ -205,7 +216,6 @@ const DoctorCard = ({ doctor }) => {
         </div>
     );
 };
-
 const PatientHome = () => {
     const [doctors, setDoctors] = useState([]);
 
@@ -230,14 +240,17 @@ const PatientHome = () => {
 
     return (
         <div>
-            <h2>List of Registered Doctors</h2>
-            <div>
-                {doctors.map((doctor) => (
-                    <DoctorCard key={doctor.id} doctor={doctor} />
-                ))}
-            </div>
+            <Navbar/>
+
+                        <div className="patient-home">
+                            <h2>List of Registered Doctors</h2>
+                            <div className="doctors-list">
+                                {doctors.map((doctor) => (
+                                    <DoctorCard key={doctor.id} doctor={doctor} />
+                                ))}
+                            </div>
+                        </div>
         </div>
     );
 };
-
 export default PatientHome;

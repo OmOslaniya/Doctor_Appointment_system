@@ -23,8 +23,8 @@ public class AppointmentController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/book")
     public ResponseEntity<String> bookAppointment(@RequestBody Appointment appointment) {
-System.out.println("inside apppppp");
-
+        System.out.println("inside apppppp");
+        System.out.println(appointment.getSchedule());
         appointmentService.bookAppointment(appointment);
 
         return new ResponseEntity<>("Appointment booked successfully", HttpStatus.CREATED);

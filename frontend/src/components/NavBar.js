@@ -1,23 +1,21 @@
-// components/NavBar.js
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import '../styles/navbar.css';
 
-const NavBar = () => {
+const Navbar = () => {
     return (
-        <nav className="navbar">
-
-            this is nacv
-            <ul>
-                <li>
-                    <Link to="/add-item">Add Item</Link>
-                </li>
-                <li>
-                    <Link to="/my-items">My Items</Link>
-                </li>
-            </ul>
-        </nav>
+        <div className="navbar">
+            <NavLink to="/" exact activeClassName="active">
+                Home
+            </NavLink>
+            <NavLink to="/my-appointments" activeClassName="active">
+                My Appointments
+            </NavLink>
+            <NavLink to="/logout" activeClassName="active">
+                Logout
+            </NavLink>
+        </div>
     );
 };
 
-export default NavBar;
+export default Navbar;
