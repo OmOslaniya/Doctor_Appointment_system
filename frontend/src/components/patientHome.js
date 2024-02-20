@@ -18,9 +18,12 @@ const DoctorCard = ({ doctor }) => {
     const [doctorobj, setdoctorobj] = useState(null);
     const [patientobj, setpatientobj] = useState(null);
     const [scheduleobj, setscheduleobj] = useState(null);
+    const [scheduleobj2, setscheduleobj2] = useState(null);
+    const [availabilitySlots,setavailabilitySlots]= useState([])
 
     const handleCheckAvailability = async () => {
         if (selectedDate && doctor) {
+            console.log(selectedDate);
             try {
                 const doctorId = doctor.doctorId;
                 const response = await fetch(`http://localhost:8080/api/doctors/${doctorId}`, {
@@ -34,29 +37,69 @@ const DoctorCard = ({ doctor }) => {
                     const doctorData = await response.json();
                     setdoctorobj(doctorData);
                     console.log("Doctor set:", doctorData);
-
-                    const response2 = await fetch(`http://localhost:8080/api/patients/${pemail}`, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-
-                    if (response2.ok) {
-                        const patientData = await response2.json();
-                        setpatientobj(patientData);
-                        console.log("Patient set:", patientData);
-
-                        // Set showSlots to true here
-                        setShowSlots(true);
-                    } else {
-                        const errorData = await response2.json();
-                        console.error('Error:', errorData.error);
-                    }
                 } else {
                     const errorData = await response.json();
                     console.error('Error:', errorData.error);
                 }
+
+            const response3 = await fetch(`http://localhost:8080/api/patients/${pemail}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response3.ok) {
+                const patientData = await response3.json();
+                setpatientobj(patientData);
+                console.log("Patient set:", patientData);
+
+                // Set showSlots to true here
+                setShowSlots(true);
+            } else {
+                const errorData = await response3.json();
+                console.error('Error:', errorData.error);
+            }
+                const formattedDate = selectedDate.toISOString().split('T')[0];
+
+            const response2 = await fetch(`http://localhost:8080/api/schedules/giveschedules`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    doctor: doctorobj,
+                    date: selectedDate,
+
+                }),
+
+            });
+
+            if (response2.ok) {
+                const scheduleData = await response2.json();
+                setscheduleobj2(scheduleData);
+                console.log("Schedule set:", scheduleData);
+
+                const newAvailabilitySlots = [];
+
+                if (!scheduleData.slot1) {
+                    newAvailabilitySlots.push('9:00 AM - 10:00 AM');
+                }
+                if (!scheduleData.slot2) {
+                    newAvailabilitySlots.push('10:00 AM - 11:00 AM');
+                }
+                if (!scheduleData.slot3) {
+                    newAvailabilitySlots.push('11:00 AM - 12:00 PM');
+                }
+
+                setavailabilitySlots(newAvailabilitySlots);
+                console.log(newAvailabilitySlots);
+            }
+            else {
+                const errorData = await response2.json();
+                console.error('Error:', errorData.error);
+            }
+
             } catch (error) {
                 console.error('Error:', error.message);
             }
@@ -83,30 +126,32 @@ const DoctorCard = ({ doctor }) => {
 
             const numericSlot = convertSlotToNumber(slot);
             console.log("slot " + numericSlot);
+            console.log(selectedDate);
             const response3 = await fetch('http://localhost:8080/api/schedules/book', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    doctor: doctorobj,
-                    date: selectedDate,
-                    slot: numericSlot,
-
+                    doctor:doctorobj,
+                    date:selectedDate,
+                    slot:numericSlot,
                 }),
             });
+
             console.log("just before");
             if (response3.ok) {
                 const scheduledata = await response3.json();
+                console.log("schedule obj");
                 console.log(scheduledata);
                 setSelectedSlot(slot);
-                setpatientobj(scheduledata);
+                setscheduleobj(scheduledata);
 
             } else {
                 console.error('Failed to book appointment.');
             }
 
-
+            console.log("before appointment booked");
             const response2 = await fetch('http://localhost:8080/api/appointments/book', {
                 method: 'POST',
                 headers: {
@@ -133,7 +178,7 @@ const DoctorCard = ({ doctor }) => {
         }
     };
 
-    const availabilitySlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM'];
+    // const availabilitySlots = ['9:00 AM - 10:00 AM', '10:00 AM - 11:00 AM', '11:00 AM - 12:00 PM'];
 
     return (
         <div>

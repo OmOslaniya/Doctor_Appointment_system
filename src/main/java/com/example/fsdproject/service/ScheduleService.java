@@ -27,7 +27,7 @@ public class ScheduleService {
         return optionalSchedule.orElse(null);
     }
 
-    public List<Schedule> getSchedulesByDoctor(Doctor doctor) {
+    public Schedule getSchedulesByDoctor(Doctor doctor) {
         return scheduleRepository.findByDoctor(doctor);
     }
 
