@@ -179,4 +179,38 @@ public class ScheduleController {
 
     }
 
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/{demail}")
+    public ResponseEntity<Doctor> giveDoctor(@PathVariable String demail)  {
+        try {
+            System.out.println("doctor email is :"+ demail);
+            Doctor doctor=doctorRepository.findByEmail(demail).orElse(null);
+            return ResponseEntity.ok(doctor);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/getallschedules")
+    public ResponseEntity<Schedule> giveallSchedule(@RequestBody abc a)  {
+        try {
+            System.out.println(a.getDoctor());
+            System.out.println(a.getDate());
+
+            Schedule schedule= scheduleService.findByDoctorAndDate(a.getDoctor(),a.getDate());
+
+                return ResponseEntity.ok(schedule);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+    }
+
+
 }

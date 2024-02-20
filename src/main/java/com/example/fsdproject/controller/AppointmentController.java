@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +36,7 @@ public class AppointmentController {
 
         return new ResponseEntity<>("Appointment booked successfully", HttpStatus.CREATED);
     }
-//    @CrossOrigin(origins = "http://localhost:3000")
-//    @GetMapping
-//    public ResponseEntity<List<Appointment>> getAppointments() {
-//        List<Appointment> appointments = appointmentService.getAllAppointments();
-//        return new ResponseEntity<>(appointments, HttpStatus.OK);
-//    }
+
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{pemail}")
@@ -56,6 +52,34 @@ public class AppointmentController {
             Map<String, String> response = new HashMap<>();
             response.put("error", "Error during doctor retrieval");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    static class abc{
+        public Schedule schedule;
+        public abc(){}
+
+        public Schedule getSchedule() {
+            return schedule;
+        }
+
+        public void setSchedule(Schedule schedule) {
+            this.schedule = schedule;
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/getallappointments")
+    public ResponseEntity<List<Appointment>> getallAppointments(@RequestBody abc a) {
+        try {
+            System.out.println("entered");
+            System.out.println(a.getSchedule());
+            List<Appointment> appointments = appointmentService.getAppointmentsBySchedule(a.getSchedule());
+            System.out.println(appointments);
+            return ResponseEntity.ok(appointments);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

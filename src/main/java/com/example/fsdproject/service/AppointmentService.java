@@ -2,6 +2,7 @@ package com.example.fsdproject.service;
 
 import com.example.fsdproject.entity.Appointment;
 import com.example.fsdproject.entity.Patient;
+import com.example.fsdproject.entity.Schedule;
 import com.example.fsdproject.repository.AppointmentRepository;
 import com.example.fsdproject.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class AppointmentService {
 
     public List<Appointment> getAppointmentsByPatient(Patient patient) {
         return appointmentRepository.findByPatient(patient);
+    }
+    public List<Appointment> getAppointmentsBySchedule(Schedule schedule) {
+        return appointmentRepository.findBySchedule(schedule);
     }
 
     public void bookAppointment(Appointment appointment) {

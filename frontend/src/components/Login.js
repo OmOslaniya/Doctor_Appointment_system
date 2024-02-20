@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-let pemail;
+let pemail,demail;
 const Login = () => {
     const navigate = useNavigate();
 
@@ -37,6 +37,7 @@ const Login = () => {
                     pemail = loginData.email;
                     navigate('/phome');
                 } else if (loginData.userType === 'doctor') {
+                    demail=loginData.email;
                     navigate('/dhome');
                 }
             } else {
@@ -145,4 +146,4 @@ const styles = {
 };
 
 export default Login;
-export { pemail };
+export { pemail ,demail};
