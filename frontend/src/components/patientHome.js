@@ -195,12 +195,16 @@ const DoctorCard = ({ doctor }) => {
         <div className="doctor-card">
             <h3>{doctor.name}</h3>
             <p>{doctor.specialization}</p>
+
             <DatePicker
                 selected={selectedDate}
                 onChange={(date) => setSelectedDate(date)}
                 dateFormat="MMMM d, yyyy"
                 placeholderText="Select a date"
+                shouldCloseOnSelect={true}
+                showWeekNumbers={true}
             />
+
             <button onClick={handleCheckAvailability}>Check Availability</button>
             {showSlots && (
                 <div>

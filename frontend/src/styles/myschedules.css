@@ -1,0 +1,96 @@
+/* myappointments.css */
+
+/* Styles for the entire page */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Styles for the date selection section */
+h2 {
+    color: #333;
+}
+
+DatePicker {
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Styles for the schedules section */
+h3 {
+    color: #333;
+    margin-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Styles for appointment details */
+li p {
+    margin: 0;
+}
+
+/* Styles for no appointment message */
+li.no-appointment {
+    color: #888;
+}
+
+/* myschedules.css */
+
+.appointment-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-card h4 {
+    margin-bottom: 5px;
+}
+
+.appointment-card p {
+    margin: 0;
+}
+
+.appointment-card button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.appointment-card button:hover {
+    background-color: #c0392b;
+}

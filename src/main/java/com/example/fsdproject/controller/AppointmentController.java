@@ -4,6 +4,7 @@ import com.example.fsdproject.entity.Appointment;
 import com.example.fsdproject.entity.Doctor;
 import com.example.fsdproject.entity.Patient;
 import com.example.fsdproject.entity.Schedule;
+import com.example.fsdproject.repository.AppointmentRepository;
 import com.example.fsdproject.repository.DoctorRepository;
 import com.example.fsdproject.repository.PatientRepository;
 import com.example.fsdproject.service.AppointmentService;
@@ -24,6 +25,9 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -80,6 +84,82 @@ public class AppointmentController {
         } catch (Exception e) {
 
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+    static class abc2{
+        public Schedule schedule;
+        public String slot;
+
+        public abc2(){}
+
+        public Schedule getSchedule() {
+            return schedule;
+        }
+
+        public void setSchedule(Schedule schedule) {
+            this.schedule = schedule;
+        }
+
+        public String getSlot() {
+            return slot;
+        }
+
+        public void setSlot(String slot) {
+            this.slot = slot;
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/removeselectedappointment")
+    public ResponseEntity<List<Appointment>> getallAppointments(@RequestBody abc2 a) {
+        try {
+            System.out.println("entered aaa");
+            System.out.println(a.getSchedule());
+            System.out.println(a.getSlot());
+            Appointment appointment = appointmentRepository.findByScheduleAndSlot(a.getSchedule(),a.getSlot());
+
+            appointmentRepository.delete(appointment);
+            System.out.println("deleted");
+
+            return ResponseEntity.ok(null);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/cancelappointment")
+    public ResponseEntity<String> cancelAppointment(@RequestBody abc2 a) {
+        try {
+            System.out.println("inside...");
+            System.out.println(a.getSlot());
+            Appointment appointment = appointmentRepository.findByScheduleAndSlot(a.getSchedule(), a.getSlot());
+
+            if (appointment != null) {
+                appointmentRepository.delete(appointment);
+                System.out.println("Appointment canceled");
+
+                Schedule schedule= a.getSchedule();
+                String slot= a.getSlot();
+
+                switch (slot) {
+                    case "1" -> schedule.setSlot1(false);
+                    case "2" -> schedule.setSlot2(false);
+                    case "3" -> schedule.setSlot3(false);
+                }
+
+                return ResponseEntity.ok("Appointment canceled successfully");
+            } else {
+                System.out.println("Appointment not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error during appointment cancellation");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during appointment cancellation");
         }
     }
 

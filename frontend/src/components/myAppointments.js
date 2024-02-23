@@ -6,7 +6,33 @@ import '../styles/myappointments.css';
 const AppointmentItem = ({ appointment }) => {
     const { slot, schedule } = appointment;
 
-    return (
+    const handleDeleteAppointment = async () => {
+        try {
+            console.log("afterrrr");
+            // console.log(schedule);
+            const response = await fetch(`http://localhost:8080/api/appointments/cancelappointment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    schedule:schedule,
+                    slot:slot,
+                }),
+            });
+
+
+        } catch (error) {
+            console.error('Error during deleteing the appointment:', error);
+        }
+
+        console.log("before cancle schedule");
+
+
+}
+
+
+        return (
         <div className="appointment-item">
             <div>
                 <strong>Slot:</strong> {slot}
@@ -20,6 +46,9 @@ const AppointmentItem = ({ appointment }) => {
             <div>
                 <strong>Date:</strong> {new Date(schedule.date).toLocaleDateString()}
             </div>
+            <button className="delete-button" onClick={handleDeleteAppointment}>
+                Delete Appointment
+            </button>
         </div>
     );
 };

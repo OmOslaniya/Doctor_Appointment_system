@@ -29,3 +29,30 @@ h2 {
     text-align: center;
     margin-bottom: 20px;
 }
+
+/* myappointments.css */
+.appointments-list {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.appointment-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.delete-button {
+    background-color: #ff5555;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.delete-button:hover {
+    background-color: #ff3333;
+}

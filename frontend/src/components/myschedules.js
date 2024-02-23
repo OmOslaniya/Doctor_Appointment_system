@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../styles/myappointments.css';
+import '../styles/myschedules.css';
 import Navbar2 from "./navbar2";
 import { demail, pemail } from "./Login";
 let svar;
@@ -97,6 +97,45 @@ const MySchedules = () => {
         }
     };
 
+    const handleCancelAppointment = async (slot) => {
+        try {
+            console.log("bbbb");
+            console.log(schedule);
+            const response = await fetch(`http://localhost:8080/api/schedules/removeselectedschedule`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    schedule:schedule,
+                    slot:slot,
+                }),
+            });
+
+
+        } catch (error) {
+            console.error('Error during deleteing the schedule:', error);
+        }
+
+        try {
+            console.log("aaaa");
+            // console.log(schedule);
+            const response = await fetch(`http://localhost:8080/api/appointments/removeselectedappointment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    schedule:schedule,
+                    slot:slot
+                }),
+            });
+
+
+        } catch (error) {
+            console.error('Error during deleteing the schedule:', error);
+        }
+    }
     return (
         <div>
             <Navbar2 />
@@ -107,6 +146,8 @@ const MySchedules = () => {
                     onChange={handleDateChange}
                     dateFormat="MMMM d, yyyy"
                     placeholderText="Select a date"
+                    shouldCloseOnSelect={true}
+                    showWeekNumbers={true}
                 />
                 <button onClick={handleCheckSchedules}>Check Schedules</button>
             </div>
@@ -114,36 +155,24 @@ const MySchedules = () => {
             {showSchedules && (
                 <div>
                     <h3>Schedules for {selectedDate.toLocaleDateString()}:</h3>
-                    <ul>
-                        {schedule.slot1 && (
-                            <li>
-                                Slot 1: {findAppointmentDetails('1')}
-                            </li>
-                        )}
-                        {schedule.slot2 && (
-                            <li>
-                                Slot 2: {findAppointmentDetails('2')}
-                            </li>
-                        )}
-                        {schedule.slot3 && (
-                            <li>
-                                Slot 3: {findAppointmentDetails('3')}
-                            </li>
-                        )}
-                    </ul>
+                    {appointments.map(appointment => (
+                        <div key={appointment.id} className="appointment-card">
+                            <h4>Slot {appointment.slot}</h4>
+                            <p>
+                                Patient Name: {appointment.patient.name}
+                                <br />
+                                Patient Email: {appointment.patient.email}
+                            </p>
+                            <button onClick={() => handleCancelAppointment(appointment.slot)}>
+                                Cancel Appointment
+                            </button>
+                        </div>
+                    ))}
                 </div>
             )}
         </div>
     );
-
-    function findAppointmentDetails(slot) {
-        const appointment = appointments.find(app => app.slot === slot);
-        if (appointment) {
-            return `Patient Name: ${appointment.patient.name}, Patient Email: ${appointment.patient.email}`;
-        } else {
-            return 'No appointment for this slot';
-        }
-    }
 };
+
 
 export default MySchedules;

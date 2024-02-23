@@ -1,7 +1,9 @@
 package com.example.fsdproject.controller;
 
+import com.example.fsdproject.entity.Appointment;
 import com.example.fsdproject.entity.Doctor;
 import com.example.fsdproject.entity.Schedule;
+import com.example.fsdproject.repository.AppointmentRepository;
 import com.example.fsdproject.repository.DoctorRepository;
 import com.example.fsdproject.repository.ScheduleRepository;
 import com.example.fsdproject.service.AppointmentService;
@@ -29,6 +31,9 @@ public class ScheduleController {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
 
     static class abc{
@@ -205,6 +210,74 @@ public class ScheduleController {
             Schedule schedule= scheduleService.findByDoctorAndDate(a.getDoctor(),a.getDate());
 
                 return ResponseEntity.ok(schedule);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+
+    }
+
+    static class abc3{
+        public Schedule schedule;
+        public String slot;
+
+        public abc3(){}
+
+        public Schedule getSchedule() {
+            return schedule;
+        }
+
+        public void setSchedule(Schedule schedule) {
+            this.schedule = schedule;
+        }
+
+        public String getSlot() {
+            return slot;
+        }
+
+        public void setSlot(String slot) {
+            this.slot = slot;
+        }
+    }
+
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/removeselectedschedule")
+    public ResponseEntity<Appointment> giveSchedule(@RequestBody abc3 a)  {
+        try {
+            System.out.println(a.getSchedule());
+            System.out.println(a.getSlot());
+
+//          Appointment appointment = appointmentRepository.findByScheduleAndSlot(a.getSchedule(),a.getSlot());
+
+            String s = a.getSlot();
+            Schedule schedule=a.getSchedule();
+            System.out.println(schedule.getSlot1());
+            System.out.println(schedule.getSlot2());
+            System.out.println(schedule.getSlot3());
+            System.out.println("slot is "+s);
+            switch (s) {
+                case "1" -> {
+                    schedule.setSlot1(false);
+                    System.out.println("slot1 deleted");
+                }
+                case "2" -> {
+                    schedule.setSlot2(false);
+                    System.out.println("slot2 deleted");
+                }
+                case "3" -> {
+                    schedule.setSlot3(false);
+                    System.out.println("slot3 deleted");
+                }
+            }
+            if (!schedule.getSlot1() && !schedule.getSlot2() && !schedule.getSlot3()) {
+                scheduleRepository.delete(schedule);
+            } else {
+                scheduleRepository.save(schedule); // Save only if changes are made
+            }
+
+            return ResponseEntity.ok(null);
+
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
