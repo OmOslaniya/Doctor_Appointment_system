@@ -270,11 +270,9 @@ public class ScheduleController {
                     System.out.println("slot3 deleted");
                 }
             }
-            if (!schedule.getSlot1() && !schedule.getSlot2() && !schedule.getSlot3()) {
-                scheduleRepository.delete(schedule);
-            } else {
+
                 scheduleRepository.save(schedule); // Save only if changes are made
-            }
+
 
             return ResponseEntity.ok(null);
 
