@@ -7,6 +7,7 @@ import com.example.fsdproject.entity.Schedule;
 import com.example.fsdproject.repository.AppointmentRepository;
 import com.example.fsdproject.repository.DoctorRepository;
 import com.example.fsdproject.repository.PatientRepository;
+import com.example.fsdproject.repository.ScheduleRepository;
 import com.example.fsdproject.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/appointments")
 public class AppointmentController {
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
 
     @Autowired
     private AppointmentService appointmentService;
@@ -150,6 +154,8 @@ public class AppointmentController {
                     case "2" -> schedule.setSlot2(false);
                     case "3" -> schedule.setSlot3(false);
                 }
+                scheduleRepository.save(schedule);
+                System.out.println("scheduleeee deleted");
 
                 return ResponseEntity.ok("Appointment canceled successfully");
             } else {
