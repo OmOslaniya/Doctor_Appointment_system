@@ -98,44 +98,47 @@ const MySchedules = () => {
     };
 
     const handleCancelAppointment = async (slot) => {
-        try {
-            console.log("bbbb");
-            console.log(schedule);
-            const response = await fetch(`http://localhost:8080/api/schedules/removeselectedschedule`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    schedule:schedule,
-                    slot:slot,
-                }),
-            });
+        const isConfirmed = window.confirm("Are you sure you want to cancel the appointment?");
 
+        if (isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:8080/api/schedules/removeselectedschedule`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        schedule: schedule,
+                        slot: slot,
+                    }),
+                });
+                if (response.ok) {
+                    setappointments(prevAppointments => prevAppointments.filter(app => app.slot !== slot));
+                }
 
-        } catch (error) {
-            console.error('Error during deleteing the schedule:', error);
+            } catch (error) {
+                console.error('Error during deleting the schedule:', error);
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/appointments/removeselectedappointment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        schedule: schedule,
+                        slot: slot
+                    }),
+                });
+
+            } catch (error) {
+                console.error('Error during deleting the appointment:', error);
+            }
         }
-
-        try {
-            console.log("aaaa");
-            // console.log(schedule);
-            const response = await fetch(`http://localhost:8080/api/appointments/removeselectedappointment`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    schedule:schedule,
-                    slot:slot
-                }),
-            });
+    };
 
 
-        } catch (error) {
-            console.error('Error during deleteing the schedule:', error);
-        }
-    }
     return (
         <div>
             <Navbar2 />

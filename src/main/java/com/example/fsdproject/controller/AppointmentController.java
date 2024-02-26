@@ -95,6 +95,7 @@ public class AppointmentController {
     static class abc2{
         public Schedule schedule;
         public String slot;
+        public String email;
 
         public abc2(){}
 
@@ -113,15 +114,24 @@ public class AppointmentController {
         public void setSlot(String slot) {
             this.slot = slot;
         }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/removeselectedappointment")
-    public ResponseEntity<List<Appointment>> getallAppointments(@RequestBody abc2 a) {
+    public ResponseEntity<List<Appointment>> removeSelectedSchedule(@RequestBody abc2 a) {
         try {
             System.out.println("entered aaa");
             System.out.println(a.getSchedule());
             System.out.println(a.getSlot());
+
             Appointment appointment = appointmentRepository.findByScheduleAndSlot(a.getSchedule(),a.getSlot());
 
             appointmentRepository.delete(appointment);
@@ -136,10 +146,11 @@ public class AppointmentController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/cancelappointment")
-    public ResponseEntity<String> cancelAppointment(@RequestBody abc2 a) {
+    public ResponseEntity<?> cancelAppointment(@RequestBody abc2 a) {
         try {
             System.out.println("inside...");
             System.out.println(a.getSlot());
+            System.out.println(a.getEmail());
             Appointment appointment = appointmentRepository.findByScheduleAndSlot(a.getSchedule(), a.getSlot());
 
             if (appointment != null) {
@@ -157,7 +168,11 @@ public class AppointmentController {
                 scheduleRepository.save(schedule);
                 System.out.println("scheduleeee deleted");
 
-                return ResponseEntity.ok("Appointment canceled successfully");
+                Patient patient= patientRepository.findByEmail(a.getEmail()).orElse(null);
+                List<Appointment> updatedAppointments = appointmentService.getAppointmentsByPatient(patient);
+
+                return ResponseEntity.ok(updatedAppointments);
+
             } else {
                 System.out.println("Appointment not found");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found");

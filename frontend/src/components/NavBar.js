@@ -5,13 +5,13 @@ import '../styles/navbar.css';
 const Navbar = () => {
     return (
         <div className="navbar">
-            <NavLink to="/" exact activeClassName="active">
+            <NavLink to="/phome" exact activeClassName="active">
                 Home
             </NavLink>
             <NavLink to="/myappointments" activeClassName="active">
                 My Appointments
             </NavLink>
-            <NavLink to="/logout" activeClassName="active">
+            <NavLink to="/login" activeClassName="active">
                 Logout
             </NavLink>
         </div>

@@ -5,13 +5,13 @@ import '../styles/navbar2.css';
 const Navbar2 = () => {
     return (
         <div className="navbar">
-            <NavLink to="/" exact activeClassName="active">
+            <NavLink to="/dhome" exact activeClassName="active">
                 Home
             </NavLink>
             <NavLink to="/myschedules" activeClassName="active">
                 My Schedules
             </NavLink>
-            <NavLink to="/logout" activeClassName="active">
+            <NavLink to="/login" activeClassName="active">
                 Logout
             </NavLink>
         </div>
