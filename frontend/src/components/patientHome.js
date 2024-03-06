@@ -6,7 +6,6 @@ import '../styles/patienthome.css'
 import '../styles/navbar.css';
 import Navbar from "./NavBar";
 // import { BrowserRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
-
 let s;
 const AppointmentSlot = ({ slot, onBookSlot }) => {
     return (

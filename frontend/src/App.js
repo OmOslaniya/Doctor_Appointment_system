@@ -32,7 +32,7 @@ const App = () => {
               <Route path="/signup" element={<Signup setUser={setUser} />} />
               <Route path="/phome" element={<PatientHome setUser={setUser} />} />
               <Route path="/dhome" element={<DoctorHome setUser={setUser} />} />
-              <Route path="/" element={<DefaultPage  />} />
+              <Route path="/" element={<Login  />} />
               <Route path="/myappointments" element={<MyAppointments setUser={setUser} />} />
               <Route path="/myschedules" element={<Myschedules setUser={setUser} />} />
 

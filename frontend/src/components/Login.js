@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Signup.css'
+import { Link } from 'react-router-dom';
 
-let pemail,demail;
+let pemail, demail;
+
 const Login = () => {
+    const linkStyle = {
+        textDecoration: 'none', // Removes the underline
+        color: 'inherit', // Keeps the default link color
+    };
+
     const navigate = useNavigate();
 
     const [loginData, setLoginData] = useState({
@@ -31,18 +39,19 @@ const Login = () => {
             });
 
             if (response.ok) {
-                console.log(`${loginData.userType} login successful!`);
-                // Redirect based on user type
+                // Display alert on successful login
                 if (loginData.userType === 'patient') {
                     pemail = loginData.email;
                     navigate('/phome');
                 } else if (loginData.userType === 'doctor') {
-                    demail=loginData.email;
+                    demail = loginData.email;
                     navigate('/dhome');
                 }
             } else {
                 console.error('Login failed.');
+
                 // Handle error, e.g., display error message
+                alert('Username or password is incorrect. Please try again.');
             }
         } catch (error) {
             console.error('Error during login:', error);
@@ -50,100 +59,53 @@ const Login = () => {
     };
 
     return (
-        <div style={styles.container}>
-            <h2 style={styles.title}>User Login</h2>
-            <form style={styles.form} onSubmit={handleLogin}>
-                <label style={styles.label}>
-                    Email:
-                    <input
-                        type="email"
-                        name="email"
-                        value={loginData.email}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                </label>
-                <br />
-                <label style={styles.label}>
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={loginData.password}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                </label>
-                <br />
-                <label style={styles.label}>
-                    User Type:
-                    <select
-                        name="userType"
-                        value={loginData.userType}
-                        onChange={handleChange}
-                        style={styles.input}
-                    >
-                        <option value="doctor">Doctor</option>
-                        <option value="patient">Patient</option>
-                    </select>
-                </label>
-                <br />
-                <button type="submit" style={styles.button}>
-                    Login
-                </button>
-            </form>
+        <div className='conatiner'>
+            <div className='center'>
+                <h1>Login</h1>
+                <form onSubmit={handleLogin}>
+                    <div className='txt_field'>
+                        <input type="email" name="email" required value={loginData.email} onChange={handleChange}/>
+                        <span></span>
+                        <label>Email</label>
+                    </div>
+
+                    <div className='txt_field'>
+                        <input type="password" name="password" required value={loginData.password}
+                               onChange={handleChange}/>
+                        <span></span>
+                        <label>Password</label>
+                    </div>
+
+                    <label>
+                        User Type:
+                        <select
+                            name="userType"
+                            value={loginData.userType}
+                            onChange={handleChange}
+
+                        >
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">Patient</option>
+                        </select>
+                    </label>
+
+                    <Link to = "/signup" style={linkStyle}>
+                        <div class="signup_link">
+                            Not Registered ? Signup
+                        </div>
+                    </Link>
+                    <center>
+                        <button type="submit" className="btn">
+                            Login
+                        </button>
+                    </center>
+                </form>
+            </div>
         </div>
     );
 };
 
-const styles = {
-    container: {
-        fontFamily: 'Arial, sans-serif',
-        backgroundColor: '#f0f0f0',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-    },
-    form: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        width: '300px',
-        textAlign: 'center',
-    },
-    label: {
-        marginBottom: '10px',
-        display: 'block',
-        textAlign: 'left',
-    },
-    input: {
-        width: '100%',
-        padding: '10px',
-        marginTop: '4px',
-        marginBottom: '12px',
-        boxSizing: 'border-box',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-    },
-    button: {
-        backgroundColor: '#4caf50',
-        color: 'white',
-        padding: '12px',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        fontSize: '16px',
-    },
-    title: {
-        textAlign: 'center',
-        color: '#333',
-    },
-};
+
 
 export default Login;
-export { pemail ,demail};
+export { pemail, demail };

@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
+import '../styles/Signup.css';
+import { Link } from 'react-router-dom';
 
 const SignupForm = () => {
+
+    const linkStyle = {
+        textDecoration: 'none', // Removes the underline
+        color: 'inherit', // Keeps the default link color
+    };
     const [userData, setUserData] = useState({
         userType: 'doctor',
         name: '',
@@ -20,6 +27,11 @@ const SignupForm = () => {
 
     const handleSignup = async (e) => {
         e.preventDefault();
+        if (userData.password.length < 6) {
+            alert('Password must be at least 6 characters long.');
+            return;
+        }
+
         try {
             const response = await fetch('http://localhost:8080/api/' + userData.userType + 's', {
                 method: 'POST',
@@ -31,6 +43,7 @@ const SignupForm = () => {
 
             if (response.ok) {
                 console.log(userData.userType + ' registered successfully!');
+                alert(`${userData.userType} registered successfully!`);
                 // Handle success, e.g., redirect to login page
             } else {
                 console.error('Registration failed.');
@@ -42,131 +55,66 @@ const SignupForm = () => {
     };
 
     return (
-        <div style={styles.container}>
-            <h2 style={styles.title}>User Signup</h2>
-            <form style={styles.form} onSubmit={handleSignup}>
-                <label style={styles.label}>
-                    User Type:
-                    <select
-                        name="userType"
-                        value={userData.userType}
-                        onChange={handleChange}
-                        style={styles.input}
-                    >
-                        <option value="doctor">Doctor</option>
-                        <option value="patient">Patient</option>
-                    </select>
-                </label>
-                <label style={styles.label}>
-                    Name:
-                    <input
-                        type="text"
-                        name="name"
-                        value={userData.name}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                </label>
-                {userData.userType === 'doctor' && (
-                    <label style={styles.label}>
-                        Specialization:
-                        <input
-                            type="text"
-                            name="specialization"
-                            value={userData.specialization}
+        <div className='container'>
+            <div className='center'>
+                <h1>Register</h1>
+                <form onSubmit={handleSignup}>
+                    <label>
+                        User Type:
+                        <select
+                            name="userType"
+                            value={userData.userType}
                             onChange={handleChange}
-                            required
-                            style={styles.input}
-                        />
+
+                        >
+                            <option value="doctor">Doctor</option>
+                            <option value="patient">Patient</option>
+                        </select>
                     </label>
-                )}
-                <label style={styles.label}>
-                    Contact Details:
-                    <input
-                        type="text"
-                        name="contactDetails"
-                        value={userData.contactDetails}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                </label>
-                <label style={styles.label}>
-                    Email:
-                    <input
-                        type="email"
-                        name="email"
-                        value={userData.email}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                </label>
-                <label style={styles.label}>
-                    Password:
-                    <input
-                        type="password"
-                        name="password"
-                        value={userData.password}
-                        onChange={handleChange}
-                        required
-                        style={styles.input}
-                    />
-                </label>
-                <button type="submit" style={styles.button}>
-                    Signup
-                </button>
-            </form>
+
+                    <div className='txt_field'>
+                        <input type="text" name="name" required value={userData.name} onChange={handleChange} />
+                        <label>Name</label>
+                    </div>
+                    {userData.userType === 'doctor' && (
+                        <div className='txt_field'>
+                            <input type="text" name="specialization" required value={userData.specialization}
+                                   onChange={handleChange} />
+                            <label>Specialization</label>
+                        </div>
+                    )}
+
+                    <div className='txt_field'>
+                        <input type="email" name="email" required value={userData.email} onChange={handleChange} />
+                        <span></span>
+                        <label>Email</label>
+                    </div>
+                    <div className='txt_field'>
+                        <input type="text" name="contactDetails" required value={userData.contactDetails}
+                               onChange={handleChange} />
+                        <label>Contact Details</label>
+                    </div>
+                    <div className='txt_field'>
+                        <input type="password" name="password" required value={userData.password}
+                               onChange={handleChange} />
+                        <span></span>
+                        <label>Password</label>
+                    </div>
+                    <Link to = "/login" style={linkStyle}>
+                        <div class="signup_link">
+                            Have an Account ? Login
+                        </div>
+                    </Link>
+                    <center>
+
+                        <button type="submit" className="btn">
+                            Signup
+                        </button>
+                    </center>
+                </form>
+            </div>
         </div>
     );
-};
-
-const styles = {
-    container: {
-        fontFamily: 'Arial, sans-serif',
-        backgroundColor: '#f0f0f0',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh',
-    },
-    form: {
-        backgroundColor: '#fff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        width: '300px',
-        textAlign: 'center',
-    },
-    label: {
-        marginBottom: '10px',
-        display: 'block',
-        textAlign: 'left',
-    },
-    input: {
-        width: '100%',
-        padding: '10px',
-        marginTop: '4px',
-        marginBottom: '12px',
-        boxSizing: 'border-box',
-        border: '1px solid #ccc',
-        borderRadius: '4px',
-    },
-    button: {
-        backgroundColor: '#4caf50',
-        color: 'white',
-        padding: '12px',
-        border: 'none',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        fontSize: '16px',
-    },
-    title: {
-        textAlign: 'center',
-        color: '#333',
-    },
 };
 
 export default SignupForm;
