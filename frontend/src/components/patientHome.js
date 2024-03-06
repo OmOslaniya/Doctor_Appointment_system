@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import {pemail} from "./Login";
 import '../styles/patienthome.css'
 import '../styles/navbar.css';
 import Navbar from "./NavBar";
-// import { BrowserRouter as Router, Route, NavLink, Switch } from 'react-router-dom';
 let s;
 const AppointmentSlot = ({ slot, onBookSlot }) => {
+    const navigate = useNavigate();
+
     return (
         <div>
             <p>{slot}</p>
@@ -26,6 +28,10 @@ const DoctorCard = ({ doctor }) => {
     const [scheduleobj2, setscheduleobj2] = useState(null);
     const [availabilitySlots,setavailabilitySlots]= useState([])
 
+
+    // useEffect(()=>{
+    //     handleCheckAvailability();
+    // })
     const handleCheckAvailability = async () => {
         if (selectedDate && doctor) {
             console.log(selectedDate);
@@ -130,6 +136,8 @@ const DoctorCard = ({ doctor }) => {
             console.log("hello");
 
             const numericSlot = convertSlotToNumber(slot);
+            const isConfirmed = window.confirm(`Do you want to book the appointment for ${slot}?`);
+            if (isConfirmed){
             console.log("slot " + numericSlot);
             console.log(selectedDate);
             const response3 = await fetch('http://localhost:8080/api/schedules/book', {
@@ -149,18 +157,20 @@ const DoctorCard = ({ doctor }) => {
                 const scheduledata = await response3.json();
                 console.log("schedule obj");
                 // console.log(scheduledata);
-                s=scheduledata;
+                s = scheduledata;
                 console.log("s is");
                 console.log(s);
                 setscheduleobj(scheduledata);
                 setSelectedSlot(slot);
 
+                setavailabilitySlots((prevSlots) => prevSlots.filter((s) => s !== slot));
+
+            }
 
             } else {
                 console.error('Failed to book appointment.');
             }
-            // console.log("SSSSSSSSSSSSSS");
-            // console.log(scheduleobj);
+
             console.log("before appointment booked");
             const response2 = await fetch('http://localhost:8080/api/appointments/book', {
                 method: 'POST',

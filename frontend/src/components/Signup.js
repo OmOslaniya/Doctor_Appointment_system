@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/Signup.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const SignupForm = () => {
+
+    const navigate = useNavigate();
+
 
     const linkStyle = {
         textDecoration: 'none', // Removes the underline
@@ -44,10 +48,9 @@ const SignupForm = () => {
             if (response.ok) {
                 console.log(userData.userType + ' registered successfully!');
                 alert(`${userData.userType} registered successfully!`);
-                // Handle success, e.g., redirect to login page
+                navigate('/login');
             } else {
                 console.error('Registration failed.');
-                // Handle error, e.g., display error message
             }
         } catch (error) {
             console.error('Error during registration:', error);

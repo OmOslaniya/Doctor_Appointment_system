@@ -45,7 +45,7 @@ const Login = () => {
                     navigate('/phome');
                 } else if (loginData.userType === 'doctor') {
                     demail = loginData.email;
-                    navigate('/dhome');
+                    navigate('/myschedules');
                 }
             } else {
                 console.error('Login failed.');

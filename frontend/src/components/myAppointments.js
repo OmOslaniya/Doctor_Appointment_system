@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { pemail } from "./Login";
 import '../styles/myappointments.css';
+import Navbar from "./NavBar";
+import NavBar from "./NavBar";
 
 const AppointmentItem = ({ appointment, onDeleteAppointment,setAppointments }) => {
     const { slot, schedule } = appointment;
@@ -46,6 +48,7 @@ const AppointmentItem = ({ appointment, onDeleteAppointment,setAppointments }) =
 
         return (
         <div className="appointment-item">
+
             <div>
                 <strong>Slot:</strong> {slot}
             </div>
@@ -101,6 +104,8 @@ const MyAppointments = () => {
     };
 
     return (
+        <div>
+            <Navbar/>
         <div className="appointments-list">
             <h2>My Appointments</h2>
             {appointments.map((appointment) => (
@@ -111,6 +116,7 @@ const MyAppointments = () => {
                     setAppointments={setAppointments}
                 />
             ))}
+        </div>
         </div>
     );
 };
