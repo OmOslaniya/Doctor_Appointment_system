@@ -1,29 +1,289 @@
-/* PatientHome.css */
+/*!*!* PatientHome.css *!*!*/
 
-.appointment-slot {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
-    text-align: center;
+/*!*.appointment-slot {*!*/
+/*!*    border: 1px solid #ccc;*!*/
+/*!*    padding: 10px;*!*/
+/*!*    margin: 10px;*!*/
+/*!*    text-align: center;*!*/
+/*!*}*!*/
+
+/*!*.doctor-card {*!*/
+/*!*    border: 2px solid #3498db;*!*/
+/*!*    border-radius: 8px;*!*/
+/*!*    padding: 15px;*!*/
+/*!*    margin: 20px;*!*/
+/*!*    background-color: #f8f8f8;*!*/
+/*!*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*!*/
+/*!*}*!*/
+
+/*!*.patient-home {*!*/
+/*!*    text-align: center;*!*/
+/*!*}*!*/
+
+/*!*.doctors-list {*!*/
+/*!*    display: flex;*!*/
+/*!*    flex-wrap: wrap;*!*/
+/*!*    justify-content: center;*!*/
+/*!*}*!*/
+
+/*!*!* Additional styles can be added based on your design preferences *!*!*/
+
+/*!* patienthome.css *!*/
+
+/*!* Common styles for components *!*/
+/*.h3 {*/
+/*    margin-bottom: 50px;*/
+/*}*/
+
+/*.p {*/
+/*    color: #555;*/
+/*    margin-bottom: 15px;*/
+/*}*/
+
+/*.button {*/
+/*    background-color: #3498db;*/
+/*    color: #fff;*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    padding: 10px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*.button:hover {*/
+/*    background-color: #2980b9;*/
+/*}*/
+
+/*.div1 {*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.h4 {*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+/*.div2 {*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*}*/
+
+/*!* Additional styles for the PatientHome component *!*/
+/*.div3 {*/
+/*    padding: 20px;*/
+/*}*/
+
+/*!* Add more styles as needed for specific components or customize existing ones *!*/
+
+/* patienthome.css */
+/* Enhance the styling for the doctor card */
+/* Updated styles for .doctor-card */
+.doctor-card {
+    margin: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fff; /* White background */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    transition: transform 0.3s ease-in-out;
+    height: 100%;
+    width: 100%;
+    max-width: 300px; /* Set a maximum width for better responsiveness */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Adjust as needed: space-between, flex-start, etc. */
+}
+
+/* Flex container for the row of .doctor-card elements */
+.doctor-cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; /* Adjust as needed: space-between, flex-start, etc. */
+    margin: -10px; /* Add negative margin to reduce space */
 }
 
 .doctor-card {
-    border: 2px solid #3498db;
-    border-radius: 8px;
+    /* Add your doctor card styles here */
+    margin: 50px; /* Adjust margin to create space between cards */
+    /* Additional styles as needed */
+}
+
+
+.doctor-card:hover {
+    transform: scale(1.05); /* Scale up on hover for a subtle effect */
+}
+
+.doctor-card h3 {
+    font-size: 24px;
+    color: #06A3DA;
+    margin-bottom: 10px;
+}
+
+.doctor-card p {
+    font-size: 18px;
+    color: #091E3E;
+    margin-bottom: 15px;
+}
+
+/* Add a decorative border to the top of the card */
+.doctor-card:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 5px;
+    background: #06A3DA;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.doctor-card button {
+    background: #F57E57;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.doctor-card button:hover {
+    background: #06A3DA;
+}
+
+/* Add a subtle border radius to the date picker */
+.doctor-card .react-datepicker-wrapper {
+    margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Further enhance the appearance of the appointment slots */
+.div1 {
+    margin-top: 20px;
+    background: #f9f9f9; /* Light gray background */
     padding: 15px;
-    margin: 20px;
-    background-color: #f8f8f8;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
-.patient-home {
-    text-align: center;
+.div1 h4 {
+    font-size: 20px;
+    color: #091E3E;
+    margin-bottom: 10px;
 }
 
-.doctors-list {
+.div2 {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
 }
 
-/* Additional styles can be added based on your design preferences */
+.div2 div {
+    margin: 5px;
+}
+
+/* Improve the selected slot paragraph styling */
+.div1 p {
+    font-size: 18px;
+    color: #06A3DA;
+    margin-top: 10px;
+}
+
+
+/* navbar.css */
+.navbar {
+    /* Add styles for the navbar container */
+    background: #EEF9FF;
+    padding: 10px 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Add styles for navbar links */
+.navbar a {
+    color: #091E3E;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+    transition: color 0.5s;
+}
+
+.navbar a:hover {
+    color: #06A3DA;
+}
+
+/* Apply similar styling for other classes */
+
+/* Add this CSS to your existing styles or create a new CSS file */
+/* patienthome.css */
+
+/* ... (existing styles) ... */
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.react-datepicker__input-container {
+    width: 100%;
+}
+
+.react-datepicker-popper {
+    z-index: 2; /* Ensure the date picker is above other elements */
+}
+
+.react-datepicker {
+    font-family: 'Jost', sans-serif; /* Use the 'Jost' font for the date picker */
+}
+
+.react-datepicker__header {
+    background-color: #06A3DA; /* Header background color */
+    color: #fff; /* Header text color */
+}
+
+.react-datepicker__day-names {
+    display: flex;
+    justify-content: space-around;
+}
+
+.react-datepicker__day {
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    margin: 0.2rem;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.react-datepicker__day:hover {
+    background-color: #06A3DA; /* Hover background color */
+    color: #fff; /* Hover text color */
+}
+
+.react-datepicker__day--selected {
+    background-color: #06A3DA; /* Selected background color */
+    color: #fff; /* Selected text color */
+}
+
+/* ... (existing styles) ... */
+/* Add this CSS to your existing styles or create a new CSS file */
+/* patienthome.css */
+
+/* ... (existing styles) ... */
+
+.react-datepicker__input-container {
+    width: 100%;
+    margin-bottom: 15px; /* Add margin for spacing */
+}
+
+.react-datepicker__input-container input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.react-datepicker__input-container input:hover,
+.react-datepicker__input-container input:focus {
+    border-color: #06A3DA; /* Change border color on hover/focus */
+}
+
+/* ... (existing styles) ... */

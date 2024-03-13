@@ -26,7 +26,6 @@ public class LoginController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
-        // Check user type and authenticate accordingly
         if ("doctor".equals(loginRequest.getUserType())) {
             Doctor doctor = doctorService.authenticateDoctor(loginRequest.getEmail(), loginRequest.getPassword());
             if (doctor != null) {
